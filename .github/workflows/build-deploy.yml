@@ -164,14 +164,18 @@ jobs:
               curl -fsSL https://get.docker.com | sudo sh
             fi
 
-            # ── Install docker-compose plugin if not present ───────
-            if ! sudo docker compose version &>/dev/null 2>&1; then
-              echo "Installing docker-compose plugin..."
-              sudo mkdir -p /root/.docker/cli-plugins
-              ARCH=$(uname -m)
-              sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-${ARCH}" \
-                -o /root/.docker/cli-plugins/docker-compose
-              sudo chmod +x /root/.docker/cli-plugins/docker-compose
+            # ── Detect docker-compose: V2 plugin > V1 standalone ──
+            if sudo docker compose version &>/dev/null 2>&1; then
+              DC="sudo docker compose"
+              echo "Using docker compose (V2 plugin)"
+            elif command -v docker-compose &>/dev/null; then
+              DC="sudo docker-compose"
+              echo "Using docker-compose (V1 standalone)"
+            else
+              echo "Neither 'docker compose' nor 'docker-compose' found. Installing V2 plugin via apt..."
+              sudo apt-get update -qq
+              sudo apt-get install -y docker-compose-plugin
+              DC="sudo docker compose"
             fi
 
             # ── Ensure app directory exists ────────────────────────
@@ -197,8 +201,8 @@ jobs:
 
             # ── Pull latest image and restart container ────────────
             sudo docker pull ghcr.io/zkj0407/tetris-game:latest
-            sudo docker compose down --remove-orphans || true
-            sudo docker compose up -d
+            $DC down --remove-orphans || true
+            $DC up -d
 
             # ── Clean up old dangling images ───────────────────────
             sudo docker image prune -f
