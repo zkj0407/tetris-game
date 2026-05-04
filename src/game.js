@@ -63,6 +63,11 @@ export class Game {
 
   get state() { return this._state; }
 
+  /** 窗口 resize 后强制重绘当前帧 */
+  forceRender() {
+    if (this._board) this._draw();
+  }
+
   start() {
     this._reset();
     this._setState(STATE.PLAYING);

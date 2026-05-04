@@ -34,13 +34,12 @@ export class Renderer {
     this.ctx  = gameCanvas.getContext('2d');
     this.nCtx = nextCanvas.getContext('2d');
     this.hCtx = holdCanvas.getContext('2d');
-
-    // 根据 canvas 实际宽度自适应 cell 大小
-    this.cell = gameCanvas.width / COLS;
   }
 
   /** 清空并绘制整帧 */
   render(state) {
+    // 每帧从 canvas 实际宽度重新计算 cell，自动响应 resize
+    this.cell = this.gc.width / COLS;
     const { board, currentPiece, ghostY, nextType, holdType, holdUsed, clearedRows, flashAlpha } = state;
     this._drawBoard(board, clearedRows, flashAlpha);
     if (currentPiece) {

@@ -25,11 +25,9 @@
   --color-J: #3b82f6;
   --color-L: #f97316;
 
-  --cell-size: 30px;
-  --board-cols: 10;
-  --board-rows: 20;
-  --board-width: calc(var(--cell-size) * var(--board-cols));
-  --board-height: calc(var(--cell-size) * var(--board-rows));
+  /* 布局变量（与 JS resizeCanvases 保持一致） */
+  --panel-width: 130px;
+  --layout-gap: 16px;
 
   --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-mono: 'Courier New', Courier, monospace;
@@ -40,6 +38,7 @@
 /* ===== Base ===== */
 html, body {
   height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -48,9 +47,8 @@ body {
   font-family: var(--font-main);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  overflow-x: hidden;
+  align-items: center;
+  min-height: 100svh;
 }
 
 /* ===== App Layout ===== */
@@ -58,10 +56,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  gap: 16px;
+  padding: 12px 16px;
+  gap: var(--layout-gap);
   width: 100%;
-  max-width: 700px;
 }
 
 /* ===== Header ===== */
@@ -85,7 +82,7 @@ body {
 .main {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: var(--layout-gap);
   justify-content: center;
   width: 100%;
 }
@@ -94,8 +91,8 @@ body {
 .panel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 130px;
+  gap: 8px;
+  width: var(--panel-width);
   flex-shrink: 0;
 }
 
@@ -315,19 +312,13 @@ kbd {
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
   :root {
-    --cell-size: 26px;
+    --panel-width: 80px;
+    --layout-gap: 10px;
   }
 
   .title {
-    font-size: 1.8rem;
-  }
-
-  .main {
-    gap: 10px;
-  }
-
-  .panel {
-    width: 80px;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
   }
 
   .panel__section {
@@ -342,12 +333,6 @@ kbd {
     font-size: 0.58rem;
   }
 
-  #nextCanvas,
-  #holdCanvas {
-    width: 72px;
-    height: 72px;
-  }
-
   .controls {
     display: none;
   }
@@ -359,14 +344,29 @@ kbd {
 
 @media (max-width: 400px) {
   :root {
-    --cell-size: 22px;
+    --panel-width: 64px;
+    --layout-gap: 8px;
   }
 
-  .panel {
-    width: 64px;
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .panel__section {
+    padding: 4px 6px;
   }
 
   .panel__value {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .panel__label {
+    font-size: 0.52rem;
+  }
+
+  .mobile-btn {
+    width: 58px;
+    height: 46px;
+    font-size: 0.9rem;
   }
 }
