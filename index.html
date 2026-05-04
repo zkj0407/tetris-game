@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>俄罗斯方块</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部标题 -->
+    <header class="header">
+      <h1 class="title">TETRIS</h1>
+    </header>
+
+    <main class="main">
+      <!-- 左侧信息面板 -->
+      <aside class="panel panel--left">
+        <div class="panel__section">
+          <h2 class="panel__label">分数</h2>
+          <p class="panel__value" id="score">0</p>
+        </div>
+        <div class="panel__section">
+          <h2 class="panel__label">最高分</h2>
+          <p class="panel__value" id="highScore">0</p>
+        </div>
+        <div class="panel__section">
+          <h2 class="panel__label">等级</h2>
+          <p class="panel__value" id="level">1</p>
+        </div>
+        <div class="panel__section">
+          <h2 class="panel__label">消行</h2>
+          <p class="panel__value" id="lines">0</p>
+        </div>
+      </aside>
+
+      <!-- 主游戏区域 -->
+      <div class="game-wrapper">
+        <canvas id="gameCanvas" width="300" height="600"></canvas>
+        <!-- 纯暗化遮罩（无内容），游戏未开始/暂停/结束时显示 -->
+        <div class="overlay" id="overlay"></div>
+      </div>
+
+      <!-- 右侧信息面板 -->
+      <aside class="panel panel--right">
+        <div class="panel__section">
+          <h2 class="panel__label">下一个</h2>
+          <canvas id="nextCanvas" width="120" height="120"></canvas>
+        </div>
+        <div class="panel__section">
+          <h2 class="panel__label">暂存</h2>
+          <canvas id="holdCanvas" width="120" height="120"></canvas>
+        </div>
+        <div class="panel__section controls">
+          <h2 class="panel__label">操作</h2>
+          <ul class="controls__list">
+            <li><kbd>←→</kbd> 移动</li>
+            <li><kbd>↑</kbd> 旋转</li>
+            <li><kbd>↓</kbd> 加速</li>
+            <li><kbd>Space</kbd> 硬降</li>
+            <li><kbd>C</kbd> 暂存</li>
+            <li><kbd>P</kbd> 暂停</li>
+          </ul>
+        </div>
+        <!-- 游戏状态卡片：开始 / 暂停 / 结束 -->
+        <div class="panel__section game-status" id="gameStatus">
+          <p class="game-status__title" id="overlayTitle">TETRIS</p>
+          <p class="game-status__subtitle" id="overlaySubtitle">经典俄罗斯方块</p>
+          <button class="btn btn--primary btn--block" id="overlayBtn">开始游戏</button>
+        </div>
+      </aside>
+    </main>
+
+    <!-- 移动端控制按钮 -->
+    <div class="mobile-controls">
+      <div class="mobile-controls__row">
+        <button class="mobile-btn" id="btnHold" aria-label="暂存">C</button>
+        <button class="mobile-btn" id="btnRotate" aria-label="旋转">↑</button>
+        <button class="mobile-btn" id="btnHardDrop" aria-label="硬降">▼▼</button>
+      </div>
+      <div class="mobile-controls__row">
+        <button class="mobile-btn" id="btnLeft" aria-label="向左">←</button>
+        <button class="mobile-btn" id="btnDown" aria-label="加速">↓</button>
+        <button class="mobile-btn" id="btnRight" aria-label="向右">→</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
