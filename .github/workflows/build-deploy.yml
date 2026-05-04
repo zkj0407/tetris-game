@@ -130,6 +130,25 @@ jobs:
        (github.event_name == 'workflow_dispatch' && inputs.deploy == true))
 
     steps:
+      - name: Verify deployment secrets are configured
+        env:
+          SERVER_HOST:     ${{ secrets.SERVER_HOST }}
+          SERVER_USER:     ${{ secrets.SERVER_USER }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          missing=()
+          [ -z "$SERVER_HOST" ]     && missing+=("SERVER_HOST")
+          [ -z "$SERVER_USER" ]     && missing+=("SERVER_USER")
+          [ -z "$SERVER_PASSWORD" ] && missing+=("SERVER_PASSWORD")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "❌ Missing required secrets: ${missing[*]}"
+            echo ""
+            echo "Please add them at:"
+            echo "  https://github.com/${{ github.repository }}/settings/secrets/actions"
+            exit 1
+          fi
+          echo "✅ All deployment secrets are configured."
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
