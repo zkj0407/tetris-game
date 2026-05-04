@@ -161,29 +161,25 @@ jobs:
             # ── Install Docker if not present ──────────────────────
             if ! command -v docker &>/dev/null; then
               echo "Installing Docker..."
-              curl -fsSL https://get.docker.com | sh
-              sudo usermod -aG docker $USER
-              newgrp docker
+              curl -fsSL https://get.docker.com | sudo sh
             fi
 
             # ── Install docker-compose plugin if not present ───────
-            if ! docker compose version &>/dev/null 2>&1; then
+            if ! sudo docker compose version &>/dev/null 2>&1; then
               echo "Installing docker-compose plugin..."
-              mkdir -p ~/.docker/cli-plugins
+              sudo mkdir -p /root/.docker/cli-plugins
               ARCH=$(uname -m)
-              [ "$ARCH" = "x86_64" ] && ARCH="x86_64"
-              [ "$ARCH" = "aarch64" ] && ARCH="aarch64"
-              curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-${ARCH}" \
-                -o ~/.docker/cli-plugins/docker-compose
-              chmod +x ~/.docker/cli-plugins/docker-compose
+              sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-${ARCH}" \
+                -o /root/.docker/cli-plugins/docker-compose
+              sudo chmod +x /root/.docker/cli-plugins/docker-compose
             fi
 
             # ── Ensure app directory exists ────────────────────────
-            mkdir -p ~/tetris-game
-            cd ~/tetris-game
+            sudo mkdir -p /opt/tetris-game
+            cd /opt/tetris-game
 
             # ── Write docker-compose.yml ───────────────────────────
-            cat > docker-compose.yml << 'EOF'
+            sudo tee docker-compose.yml > /dev/null << 'EOF'
             services:
               tetris:
                 image: ghcr.io/zkj0407/tetris-game:latest
@@ -200,11 +196,11 @@ jobs:
             EOF
 
             # ── Pull latest image and restart container ────────────
-            docker pull ghcr.io/zkj0407/tetris-game:latest
-            docker compose down --remove-orphans || true
-            docker compose up -d
+            sudo docker pull ghcr.io/zkj0407/tetris-game:latest
+            sudo docker compose down --remove-orphans || true
+            sudo docker compose up -d
 
             # ── Clean up old dangling images ───────────────────────
-            docker image prune -f
+            sudo docker image prune -f
 
             echo "✅ Tetris game deployed at http://$(curl -s ifconfig.me)"
