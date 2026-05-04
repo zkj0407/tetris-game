@@ -1,0 +1,13 @@
+services:
+  tetris:
+    image: ghcr.io/zkj0407/tetris-game:latest
+    container_name: tetris-game
+    ports:
+      - "80:80"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
